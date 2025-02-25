@@ -1,0 +1,45 @@
+// Each #kernel tells which function to compile; you can have many kernels
+#pragma kernel CSMain
+
+// Create a RenderTexture with enableRandomWrite flag and set it
+// with cs.SetTexture
+
+// Inputs
+Texture2D<float4> _input_frame_texture;
+Texture2D<float4> _mip1_texture;
+Texture2D<float4> _mip2_texture;
+
+// Outputs
+RWTexture2D<float4> _foveated_output_texture;
+
+// Input Parameters
+float2 _foveation_center;
+float _radius_fovea; // inside is mip0
+float _radius_periphery; // inside is mip1, outside mip2
+
+
+
+[numthreads(8,8,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+	uint width;
+	uint height;
+	_input_frame_texture.GetDimensions(width, height);
+	
+
+	if (id.x >= width || id.y >= height)
+	{
+		return;
+	}
+	
+	float2 uv = (float2) id.xy / float2(width, height);
+	float dist = distance(uv, _foveation_center);
+	float4 sample_colour = dist < _radius_fovea ? _input_frame_texture[id.xy] : (dist < _radius_periphery ? _mip1_texture[id.xy / 2] : _mip2_texture[id.xy / 4]);
+	_foveated_output_texture[id.xy] = sample_colour;
+	
+	/* This method would use mips, which won't work on screen-space textures that aren't pow(2)
+	float mip_level = dist < _radius_fovea ? 0 : (dist < _radius_periphery ? 1 : 2);
+	float4 colour = _input_frame_texture.SampleLevel(_sampler_state, uv, mip_level);
+    
+	_foveated_output_texture[id.xy] = colour;*/
+}

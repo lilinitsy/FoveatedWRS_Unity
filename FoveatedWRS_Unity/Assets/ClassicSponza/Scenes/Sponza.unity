@@ -249,6 +249,7 @@ GameObject:
   - component: {fileID: 1178077314}
   - component: {fileID: 1178077319}
   - component: {fileID: 1178077320}
+  - component: {fileID: 1178077321}
   m_Layer: 0
   m_Name: Camera_1
   m_TagString: MainCamera
@@ -399,7 +400,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1178077312}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 61a64362022ed384597cbcf7b14721be, type: 3}
   m_Name: 
@@ -407,6 +408,24 @@ MonoBehaviour:
   blend_previous_frame_compute_shader: {fileID: 7200000, guid: 0c1b3f2a6fe5f5846857275a78b74e3d, type: 3}
   _previous_frame_texture: {fileID: 0}
   _blended_frame_output_texture: {fileID: 0}
+--- !u!114 &1178077321
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1178077312}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9ac0e61b94371db47b76c797e036deff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  foveated_compute_shader: {fileID: 7200000, guid: 1ee25ce19440dff4e974695822d19bcc, type: 3}
+  _mip1_input_texture: {fileID: 0}
+  _mip2_input_texture: {fileID: 0}
+  _output_render_texture: {fileID: 0}
+  foveal_radius: 0.1
+  mid_periphery_radius: 0.3
 --- !u!4 &1553550279 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6431586923729967165, guid: 638e3bfc809074af2819f62b6c308c75, type: 3}
