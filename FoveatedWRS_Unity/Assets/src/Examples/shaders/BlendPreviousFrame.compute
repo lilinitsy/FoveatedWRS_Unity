@@ -3,12 +3,32 @@
 
 // Create a RenderTexture with enableRandomWrite flag and set it
 // with cs.SetTexture
-RWTexture2D<float4> Result;
+
+// Input
+Texture2D<float4> _current_frame_texture;
+Texture2D<float4> _previous_frame_texture;
+
+// Output
+RWTexture2D<float4> _blended_frame_output_texture;
+
 
 [numthreads(8,8,1)]
 void CSMain (uint3 id : SV_DispatchThreadID)
 {
     // TODO: insert actual code here!
-
-    Result[id.xy] = float4(id.x & id.y, (id.x & 15)/15.0, (id.y & 15)/15.0, 0.0);
+	uint width;
+	uint height;
+	_current_frame_texture.GetDimensions(width, height);
+	if (id.x >= width || id.y >= height)
+	{
+		return;
+	}
+	
+	float4 current_colour = _current_frame_texture[id.xy];
+	float4 previous_colour = _previous_frame_texture[id.xy];
+	
+	// Blend 50/50
+	float4 blended_colour = lerp(current_colour, previous_colour, 0.5);
+	// To check that it's working, since the effect is extremely subtle: blended_colour.r += 0.5;
+	_blended_frame_output_texture[id.xy] = blended_colour;
 }
